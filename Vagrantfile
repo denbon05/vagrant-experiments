@@ -13,13 +13,14 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "ubuntu/focal64"
+  config.vm.network "forwarded_port", guest: 8080, host: 8080
 
   config.vm.provision "ansible_local" do |ansible|
     # ansible.inventory_path = "./inventory.yml"
     ansible.galaxy_roles_path = 'roles/'
     ansible.galaxy_role_file = 'requirements.yml'
     ansible.verbose = "vv"
-    ansible.playbook = "playbook.yml"
+    ansible.playbook = "fastify-blog.yml"
     ansible.vault_password_file = './.env'
   end
 
