@@ -1,0 +1,6 @@
+roles:
+  - name: geerlingguy.nodejs
+    version: 6.0.0
+
+  - name: geerlingguy.postgresql
+    version: 3.4.0

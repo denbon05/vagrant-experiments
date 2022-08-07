@@ -1,0 +1,63 @@
+- name: Setup environment
+  hosts: all
+  vars:
+    postgresql_auth_method: md5
+    dbusername: vagrant
+    dbname: vagrant
+    app_dirpath: /vagrant/app
+  become: True
+
+  roles:
+    - role: geerlingguy.nodejs
+      vars:
+        nodejs_version: "16.x"
+    - role: geerlingguy.postgresql
+      vars:
+        postgresql_hba_entries:
+          - { type: local, database: all, user: postgres, auth_method: trust }
+          - {
+              type: local,
+              database: all,
+              user: all,
+              auth_method: "{{ postgresql_auth_method }}",
+            }
+          - {
+              type: host,
+              database: all,
+              user: all,
+              address: "127.0.0.1/32",
+              auth_method: "{{ postgresql_auth_method }}",
+            }
+          - {
+              type: host,
+              database: all,
+              user: all,
+              address: "::1/128",
+              auth_method: "{{ postgresql_auth_method }}",
+            }
+      notify:
+        - restart postgresql
+
+  tasks:
+    - name: prepare db
+      block:
+        - name: restart postgresql
+          systemd:
+            name: postgresql
+            state: reloaded
+
+        - name: create user
+          postgresql_user:
+            name: "{{dbusername}}"
+            password: "{{db_password}}"
+            db: postgres
+            priv: ALL
+            state: present
+            login_user: postgres
+
+        - name: create db
+          postgresql_db:
+            name: "{{dbname}}"
+            encoding: UTF-8
+            state: present
+            login_user: postgres
