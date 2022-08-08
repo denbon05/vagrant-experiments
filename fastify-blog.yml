@@ -2,7 +2,6 @@
   hosts: all
   vars:
     postgresql_auth_method: md5
-    dbusername: vagrant
     dbname: vagrant
     app_dirpath: /vagrant/app
   become: True

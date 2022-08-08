@@ -1,4 +1,4 @@
 .vagrant
 roles
-.env*
+.secrets*
 app/

@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
     ansible.galaxy_role_file = 'requirements.yml'
     ansible.verbose = "vv"
     ansible.playbook = "fastify-blog.yml"
-    ansible.vault_password_file = './.env'
+    ansible.vault_password_file = './.secrets'
   end
 
   # Disable automatic box update checking. If you disable this, then
